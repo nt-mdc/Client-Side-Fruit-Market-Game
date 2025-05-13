@@ -2,329 +2,457 @@
 /* CSS Document */
 
 @font-face {
-	font-family: "rounds black";
-	src: url("../fonts/rounds_black/Rounds Black.otf");
+  font-family: "rounds black";
+  src: url("../fonts/rounds_black/Rounds Black.otf");
 }
 
 * {
-	margin: 0 auto;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: "rounds black";
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "rounds black";
 }
 
 button,
 label {
-	cursor: pointer;
+  cursor: pointer;
 }
 
 hr {
-	border: none;
-	margin: 0;
-	padding: 20px 0;
+  border: none;
+  margin: 0;
+  padding: 20px 0;
 }
 
 #wrap {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	left: 0;
-	top: 0;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 #inner {
-	width: 300%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
+  width: 300%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin-left: 0;
+  transition: all 2s ease;
 }
 
-#inner>div {
-	width: calc(100% / 3);
-	height: 100%;
-	position: relative;
-	float: left;
+#inner > div {
+  width: calc(100% / 3);
+  height: 100%;
+  position: relative;
+  float: left;
 }
 
 form div {
-	margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 input {
-	width: 100%;
-	height: 60px;
-	border: none;
-	border-radius: 30px;
-	padding: 10px 30px;
-	box-shadow: 0 0 16px -5px #333;
+  width: 100%;
+  height: 60px;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 30px;
+  box-shadow: 0 0 16px -5px #333;
 }
 
 svg {
-	max-width: 100%;
-	max-height: 100%;
-	display: block;
-	overflow: visible;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  overflow: visible;
 }
 
 /*start*/
 #start {
-	background-image: url("../imgs/bg1.jpg");
+  background-image: url("../imgs/bg1.jpg");
 }
 
 #start-svg {
-	width: 100%;
-	position: relative;
-	height: 75%;
-	background-image: url("../imgs/start-main.svg");
-	background-position: center;
-	background-repeat: no-repeat;
-	border: 1px solid red;
+  width: 100%;
+  position: relative;
+  height: 75%;
+  background-image: url("../imgs/start-main.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 10;
 }
 
 #start-form {
-	width: 400px;
-	position: absolute;
-	top: 690px;
-	left: 50%;
-	transform: translateX(-50%);
-	z-index: 10;
-	padding-top: 20px;
+  width: 400px;
+  position: absolute;
+  top: 690px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding-top: 20px;
 }
 
 #start-btn {
-	position: absolute;
-	top: -100%;
-	left: 50%;
-	background: url("../imgs/btn-start.svg") center center no-repeat;
-	width: auto;
-	height: auto;
-	border: none;
-	transition: all .3s ease;
-	transform: translateX(-50%);
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  background: url("../imgs/btn-start.svg") center center no-repeat;
+  width: auto;
+  height: auto;
+  border: none;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  z-index: 5;
 }
 
 #start-btn-bg {
-	transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 
 #start-btn:active #start-btn-bg {
-	transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 /*game*/
 #game {
-	background-image: url("../imgs/bg2.jpg");
+  background-image: url("../imgs/bg2.jpg");
 }
 
 #game-data-svg {
-	width: 600px;
-	position: absolute;
-	left: 50px;
-	top: 30px;
+  width: 600px;
+  position: absolute;
+  left: 50px;
+  top: 30px;
+  height: inherit;
+  background: url(../imgs/game-info.svg) no-repeat;
 }
 
 #game-data-svg h2 {
-	width: calc(100% - 220px);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	-moz-background-clip: text;
-	-moz-text-fill-color: transparent;
+  width: calc(100% - 220px);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 
-	-webkit-text-stroke-width: 3px;
-	-webkit-text-stroke-color: #3f2000;
-	-moz-text-stroke-width: 3px;
-	-moz-text-stroke-color: #3f2000;
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: #3f2000;
+  -moz-text-stroke-width: 3px;
+  -moz-text-stroke-color: #3f2000;
 
-	position: absolute;
-	left: 195px;
-	font-size: 35px;
-	letter-spacing: -2px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
-	display: block;
-	text-align: center;
+  position: absolute;
+  left: 195px;
+  font-size: 35px;
+  letter-spacing: -2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-align: center;
 }
 
 #text-stage {
-	background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	top: 272px;
+  background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  top: 272px;
 }
 
 #text-nickname {
-	background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	top: 358px;
+  background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  top: 358px;
 }
 
 #text-score {
-	background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	top: 440px;
+  background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  top: 440px;
 }
 
 #game-timer-svg {
-	width: 750px;
-	position: absolute;
-	right: 250px;
-	top: 0;
+  width: 750px;
+  position: absolute;
+  right: 250px;
+  top: 0;
+  height: inherit;
+  background: url("../imgs/timer.svg") no-repeat;
+}
+
+#game-timer-bg {
+  width: inherit;
+  height: 20px;
+  background: url("../imgs/bar-top.png") center center no-repeat;
 }
 
 #game-boards-svg {
-	width: 800px;
-	position: absolute;
-	right: 220px;
-	top: 150px;
+  width: 800px;
+  position: absolute;
+  right: 220px;
+  top: 150px;
+  height: inherit;
+  background: url("../imgs/game-boards.svg") no-repeat;
 }
 
 #game-board-items {
-	width: 736px;
-	height: 726px;
-	padding: 16px 20px 15px 18px;
-	position: absolute;
-	right: 46px;
-	top: 19px;
-	text-align: center;
+  width: 736px;
+  height: 726px;
+  padding: 16px 20px 15px 18px;
+  position: absolute;
+  right: 46px;
+  top: 19px;
+  text-align: center;
 }
 
-#game-board-items>div {
-	width: 81px;
-	height: 81px;
-	margin-bottom: 7px;
-	float: left;
+#game-board-items > div {
+  width: 81px;
+  height: 81px;
+  margin-bottom: 7px;
+  float: left;
 }
 
-#game-board-items>div.item1 {
-	margin-right: 6px;
+#game-board-items > div.item1 {
+  margin-right: 6px;
 }
 
-#game-board-items>div.item2,
-#game-board-items>div.item3,
-#game-board-items>div.item5,
-#game-board-items>div.item6 {
-	margin-right: 7px;
+#game-board-items > div.item2,
+#game-board-items > div.item3,
+#game-board-items > div.item5,
+#game-board-items > div.item6 {
+  margin-right: 7px;
 }
 
-#game-board-items>div.item4,
-#game-board-items>div.item7 {
-	margin-right: 8px;
+#game-board-items > div.item4,
+#game-board-items > div.item7 {
+  margin-right: 8px;
 }
 
 /*end*/
 #end {
-	background-image: url("../imgs/bg3.jpg");
+  background-image: url("../imgs/bg3.jpg");
 }
 
 #end-result-svg {
-	width: 1000px;
-	position: relative;
+  width: 1000px;
+  position: relative;
+  height: inherit;
+  background: url("../imgs/game-result.svg") no-repeat;
 }
 
 #end-result-svg h4 {
-	width: 230px;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	-moz-background-clip: text;
-	-moz-text-fill-color: transparent;
+  width: 230px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 
-	-webkit-text-stroke-width: 2px;
-	-webkit-text-stroke-color: #3f2000;
-	-moz-text-stroke-width: 2px;
-	-moz-text-stroke-color: #3f2000;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #3f2000;
+  -moz-text-stroke-width: 2px;
+  -moz-text-stroke-color: #3f2000;
 
-	position: absolute;
-	left: 425px;
-	font-size: 24px;
-	letter-spacing: -0.5px;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	white-space: nowrap;
-	display: block;
-	text-align: center;
+  position: absolute;
+  left: 425px;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: block;
+  text-align: center;
 }
 
 #text-nickname-2 {
-	background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	top: 533px;
+  background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  top: 533px;
 }
 
 #text-score-2 {
-	background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
-	top: 596px;
+  background: -webkit-linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  background: linear-gradient(rgb(255, 218, 0), rgb(239, 111, 37));
+  top: 596px;
 }
 
 #text-time {
-	background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
-	top: 662px;
+  background: -webkit-linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  background: linear-gradient(rgb(248, 210, 11), rgb(0, 162, 160));
+  top: 662px;
 }
-
 
 #start,
 #game,
 #end {
-	background-size: cover;
-	background-position: center;
-	overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
 }
-
 
 #apple {
-	animation: fruitStart 1.5s ease infinite;
+  animation: fruitStart 1.5s ease infinite;
 }
-
 
 @keyframes fruitStart {
-	0% {
-		transform: translateY(0);
-		transform: scale(1.2);
-	}
+  0% {
+    transform: translateY(0);
+    transform: scale(1.2);
+  }
 
-	50% {
-		transform: translateY(30px);
-		transform: scale(1.0);
-	}
+  50% {
+    transform: translateY(30px);
+    transform: scale(1);
+  }
 
-	100% {
-		transform: translateY(0);
-		transform: scale(1.2);
-	}
+  100% {
+    transform: translateY(0);
+    transform: scale(1.2);
+  }
 }
 
-.fruits-container{
-	position: absolute;
-	top: 105%;
-	left: 50%;
-	transform: translateX(-50%);
-	display: flex;
-	flex-direction: row;
-	gap: 64px;
-	align-items: center;
-	justify-content: center;
+.fruits-container {
+  position: absolute;
+  top: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 64px;
+  align-items: center;
+  justify-content: center;
 }
 
+.fruits-container * {
+  animation: fruits 2s ease-out infinite;
+}
 
-.fruits-container *{
-	animation: fruits 1s ease infinite;
+.clouds-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.cloud {
+  position: absolute;
+  animation: cloud 2s ease-out infinite;
+}
+
+.cloud:nth-child(1) {
+  top: 400px;
+  left: 29%;
+}
+
+.cloud:nth-child(2) {
+  top: 500px;
+  left: 65%;
+}
+
+.cloud:nth-child(3) {
+  top: 300px;
+  left: 70%;
+}
+
+@keyframes cloud {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes fruits {
-	0% {
-		transform: translateY(0px);
-		transform: scale(1);
-	}
+  0% {
+    transform: translateY(0px) scale(1);
+  }
 
-	50% {
-		transform: translateY(-100px);
-		transform: scale(1.1);
-	}
+  50% {
+    transform: translateY(-7px) scale(0.95);
+  }
 
-	100% {
-		transform: translateY(0px);
-		transform: scale(1);
-	}
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.o-0 {
+  opacity: 0;
+}
+
+.o-1 {
+  opacity: 1;
+}
+
+.t-left {
+  margin-left: -100% !important;
+}
+
+@keyframes trans {
+  to {
+    margin-left: -100%;
+  }
+}
+
+.selected {
+  transition: all 1s ease;
+  animation: selected 0.8s ease infinite;
+}
+
+@keyframes selected {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0.85);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.match {
+  animation: matched 1s ease forwards;
+}
+
+.newFruitItem {
+  animation: newFruit 1s ease-out forwards;
+  transform: scale(0);
+}
+
+@keyframes matched {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes newFruit {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
