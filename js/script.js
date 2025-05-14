@@ -56,6 +56,7 @@ for (let i = 0; i < gameMatrix.length; i++) {
 
       if (fruit.classList.contains("selected")) {
         selectedFruits.push({ element: fruit, i, j });
+        deleteItem(selectedFruits[0].i, selectedFruits[0].j);
       } else {
         selectedFruits = selectedFruits.filter((f) => f.element == !fruit);
       }
@@ -76,12 +77,11 @@ for (let i = 0; i < gameMatrix.length; i++) {
           gameMatrix[first.i][first.j] = gameMatrix[second.i][second.j];
           gameMatrix[second.i][second.j] = tempMatrixValues;
 
-
           let firstCheck = checkForMatches(gameMatrix, first.i, first.j);
           let secondCheck = checkForMatches(gameMatrix, second.i, second.j);
 
-          verifyMatchedIndexes(firstCheck);
-          verifyMatchedIndexes(secondCheck);
+          handleMatches(firstCheck);
+          handleMatches(secondCheck);
 
           console.log(firstCheck, secondCheck);
 
@@ -101,10 +101,6 @@ for (let i = 0; i < gameMatrix.length; i++) {
     });
   }
 }
-
-(function () {
-  console.log(1);
-})();
 
 // console.log(gameMatrix);
 
@@ -162,30 +158,53 @@ function checkForMatches(gameMatrix, i, j) {
   };
 }
 
-function verifyMatchedIndexes({ match, column, row }) {
+function handleMatches({ match, column, row }) {
   if (match) {
-    if (column.amount > 1 || row.amount > 1) {
+    if (column.amount >= 3 || row.amount >= 3) {
       column.indexs.forEach((i) => {
         row.indexs.forEach((j) => {
           gameMatrixEl[i][j].fruit.classList.add("match");
           setTimeout(() => {
             console.log(gameMatrixEl[i][j]);
-            
-            gameMatrixEl[i][j].fruitItem.removeChild(gameMatrixEl[i][j].fruit);
-            newFruit(gameMatrixEl[i][j].fruitItem)
-          }, 1000);
 
+            gameMatrixEl[i][j].fruitItem.removeChild(gameMatrixEl[i][j].fruit);
+            console.log(column.indexs, row.indexs);
+
+            // newFruit(gameMatrixEl[i][j].fruitItem);
+          }, 1000);
         });
       });
     }
   }
 }
 
-function newFruit(fruitItem){
-    let fruitData = fruits[Math.floor(Math.random() * 5)];
-    let newFruit = document.createElement('img');
-    newFruit.setAttribute("src", fruitData.src);
-    newFruit.classList.add("pointer", "newFruitItem");
-    newFruit.alt = fruitData.fruit;
-    fruitItem.append(newFruit);
+function newFruit(fruitItem) {
+  let fruitData = fruits[Math.floor(Math.random() * 5)];
+  let newFruit = document.createElement("img");
+  newFruit.setAttribute("src", fruitData.src);
+  newFruit.classList.add("pointer", "newFruitItem");
+  newFruit.alt = fruitData.fruit;
+  fruitItem.append(newFruit);
+  addFruitActionListener(newFruit);
 }
+
+function deleteItem(i, j) {
+  let aboveItems = [];
+  gameMatrixEl[i][j].fruitItem.removeChild(gameMatrixEl[i][j].fruit);
+  let up = i - 1;
+
+  while (up >= 0) {
+    aboveItems.push({i: up,j});
+    up--;
+  }
+
+  aboveItems.forEach((item) => {
+    let tempMatrixValues = gameMatrix[item.i][item.j];
+    gameMatrix[item.i][item.j] = gameMatrix[item.i+1][item.j+1];
+    gameMatrix[item.i+1][item.j+1] = tempMatrixValues;
+  });
+
+  console.log(aboveItems);
+  console.log(gameMatrix);
+}
+
