@@ -39,17 +39,13 @@ let gameMatrixEl = Array.from({ length: 8 }, () => Array.from({ length: 8 }));
 
 for (let i = 0; i < gameMatrix.length; i++) {
   for (let j = 0; j < gameMatrix[i].length; j++) {
-    let fruitItem = document.createElement("div");
-    let fruit = document.createElement("img");
+    let fruit = document.createElement("div");
 
-    fruitItem.classList.add(`item${j + 1}`);
-    fruit.setAttribute("src", gameMatrix[i][j].src);
-    fruit.classList.add("pointer");
-    fruit.alt = gameMatrix[i][j].fruit;
+    fruit.classList.add('fruit');
 
-    fruitItem.append(fruit);
-    gameBoardItems.append(fruitItem);
-    gameMatrixEl[i][j] = { fruit: fruit, fruitItem: fruitItem };
+
+    gameBoardItems.append(fruit);
+  
 
     fruit.addEventListener("click", () => {
       fruit.classList.toggle("selected");

@@ -204,28 +204,7 @@ svg {
   text-align: center;
 }
 
-#game-board-items > div {
-  width: 81px;
-  height: 81px;
-  margin-bottom: 7px;
-  float: left;
-}
 
-#game-board-items > div.item1 {
-  margin-right: 6px;
-}
-
-#game-board-items > div.item2,
-#game-board-items > div.item3,
-#game-board-items > div.item5,
-#game-board-items > div.item6 {
-  margin-right: 7px;
-}
-
-#game-board-items > div.item4,
-#game-board-items > div.item7 {
-  margin-right: 8px;
-}
 
 /*end*/
 #end {
@@ -408,16 +387,16 @@ svg {
 }
 
 @keyframes selected {
-  0% {
-    transform: scale(1);
+0% {
+    transform: scale(0.95) rotateZ(-7deg);
   }
 
   50% {
-    transform: scale(0.85);
+    transform: scale(0.95) rotateZ(7deg);
   }
 
   100% {
-    transform: scale(1);
+    transform: scale(0.95) rotateZ(-7deg);
   }
 }
 
