@@ -190,21 +190,33 @@ svg {
   position: absolute;
   right: 220px;
   top: 150px;
-  height: inherit;
+  height: 800px;
   background: url("../imgs/game-boards.svg") no-repeat;
+    padding: 32px 40px 30px 36px;
+
 }
 
 #game-board-items {
-  width: 736px;
-  height: 726px;
-  padding: 16px 20px 15px 18px;
-  position: absolute;
-  right: 46px;
-  top: 19px;
+  width: 700px;
+  height: 700px;
+  position: relative;
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
-
+.fruit {
+  width: 12.5%;
+  height: 12.5%;
+  position: absolute;
+  padding: 5px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: scale(.75);
+  transition: all .3s ease;
+  cursor: pointer;
+}
 
 /*end*/
 #end {
@@ -382,21 +394,21 @@ svg {
 }
 
 .selected {
-  transition: all 1s ease;
-  animation: selected 0.8s ease infinite;
+  transition: all .3s ease;
+  animation: selected .8s ease infinite;
 }
 
 @keyframes selected {
-0% {
-    transform: scale(0.95) rotateZ(-7deg);
+  0% {
+    transform: scale(0.8);
   }
 
   50% {
-    transform: scale(0.95) rotateZ(7deg);
+    transform: scale(0.7);
   }
 
   100% {
-    transform: scale(0.95) rotateZ(-7deg);
+    transform: scale(0.8);
   }
 }
 
@@ -461,3 +473,76 @@ svg {
     transform: translateX(0);
   }
 }
+
+
+
+
+
+
+.fruit.added{
+
+    transform: scale(0);
+
+}
+
+
+
+.fruit.removed{
+
+    transform: scale(0.1);
+
+}
+
+
+
+
+.banana{
+
+    background-image: url('img/fruit-banana.png');
+
+}
+
+
+
+.apple{
+
+    background-image: url('img/fruit-apple.png');
+
+}
+
+
+
+.watermelon{
+
+    background-image: url('img/fruit-watermelon.png');
+
+}
+
+
+
+.peach{
+
+    background-image: url('img/fruit-peach.png');
+
+}
+
+
+
+.grape{
+
+    background-image: url('img/fruit-grape.png');
+
+}
+
+
+
+.bomb{
+
+    background-image: url('img/bomb.png');
+
+    background-size: 70%;
+
+}
+
+
+

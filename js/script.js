@@ -1,11 +1,15 @@
 let start = document.getElementById("inner");
 let startForm = document.getElementById("start-form");
-let nicaknameInput = document.getElementById("nickname");
+let nicknameInput = document.getElementById("nickname");
 let game = document.getElementById("game");
 let end = document.getElementById("end");
-
+let scoreItem = document.getElementById('text-score');
 let gameBoardItems = document.getElementById("game-board-items");
+let gameTimer = document.getElementById("game-timer-bg");
 
+gameTimer.style.width = "100%"
+
+let score = 0;
 let nickname = "";
 
 const fruits = [
@@ -15,192 +19,298 @@ const fruits = [
   { fruit: "peach", src: "../imgs/fruit-peach.png" },
   { fruit: "watermelon", src: "../imgs/fruit-watermelon.png" },
 ];
+const bombItem = { type: "bomb", src: "../imgs/bomb.png" };
 
-startForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  nickname = nicaknameInput.value;
-  start.classList.add("t-left");
-});
+let itemSelected = null;
 
-let timer = 60;
-
-function gameTimer() {
-  setInterval(() => {
-    timer--;
-    console.log(timer);
-  }, 1000);
-}
-
-let gameMatrix = Array.from({ length: 8 }, () =>
-  Array.from({ length: 8 }, () => fruits[Math.floor(Math.random() * 5)])
-);
-let selectedFruits = [];
-let gameMatrixEl = Array.from({ length: 8 }, () => Array.from({ length: 8 }));
-
-for (let i = 0; i < gameMatrix.length; i++) {
-  for (let j = 0; j < gameMatrix[i].length; j++) {
+let gameMatrix = Array.from({ length: 8 }, (_, i) =>
+  Array.from({ length: 8 }, (_, j) => {
+    let matrixFruit = fruits[Math.floor(Math.random() * 5)];
     let fruit = document.createElement("div");
 
-    fruit.classList.add('fruit');
+    fruit.dataset.type = matrixFruit.fruit;
+    fruit.dataset.coordX = i;
+    fruit.dataset.coordY = j;
 
+    fruit.classList.add("fruit");
+    fruit.style.top = `${i * 12.5}%`;
+    fruit.style.left = `${j * 12.5}%`;
+    fruit.style.backgroundImage = `url('${matrixFruit.src}')`;
 
-    gameBoardItems.append(fruit);
-  
+    addClickListener(fruit);
 
-    fruit.addEventListener("click", () => {
-      fruit.classList.toggle("selected");
+    gameBoardItems.appendChild(fruit);
+    return fruit;
+  })
+);
 
-      if (fruit.classList.contains("selected")) {
-        selectedFruits.push({ element: fruit, i, j });
-        deleteItem(selectedFruits[0].i, selectedFruits[0].j);
+function addClickListener(item) {
+  item.addEventListener("click", (e) => {
+    let x = e.currentTarget.dataset.coordX;
+    let y = e.currentTarget.dataset.coordY;
+
+    if (!itemSelected) {
+      if (gameMatrix[x][y].dataset.type == "bomb") {
+        explodeCoord(x, y);
       } else {
-        selectedFruits = selectedFruits.filter((f) => f.element == !fruit);
+        itemSelected = gameMatrix[x][y];
+        itemSelected.classList.add("selected");
       }
-      console.log(selectedFruits);
+    } else {
+      if (itemSelected == gameMatrix[x][y]) {
+        itemSelected.classList.remove("selected");
+        itemSelected = null;
+      } else {
+        toggleItems(gameMatrix[x][y]);
+      }
+    }
+  });
+}
 
-      if (selectedFruits.length == 2) {
-        const [first, second] = selectedFruits;
+function explodeCoord(x, y) {
+  let col = [];
+  let row = [];
 
-        if (
-          (Math.abs(first.i - second.i) === 1 && first.j === second.j) ||
-          (Math.abs(first.j - second.j) === 1 && first.i === second.i)
+  for (let i = 0; i < 8; i++) {
+    col.push(gameMatrix[i][y]);
+    row.push(gameMatrix[x][i]);
+  }
+
+  removeSequence(col);
+  removeSequence(row);
+
+  setTimeout(() => verifyItems(), 500);
+}
+
+function toggleItems(item) {
+  let leftSel = itemSelected.style.left;
+  let topSel = itemSelected.style.top;
+  let xSel = +itemSelected.dataset.coordX;
+  let ySel = +itemSelected.dataset.coordY;
+
+  let leftItem = item.style.left;
+  let topItem = item.style.top;
+  let xItem = +item.dataset.coordX;
+  let yItem = +item.dataset.coordY;
+
+  if (
+    (Math.abs(xItem - xSel) == 1 && yItem == ySel) ||
+    (Math.abs(yItem - ySel) == 1 && xItem == xSel)
+  ) {
+    itemSelected.style.left = leftItem;
+    itemSelected.style.top = topItem;
+    itemSelected.dataset.coordX = xItem;
+    itemSelected.dataset.coordY = yItem;
+
+    item.style.left = leftSel;
+    item.style.top = topSel;
+    item.dataset.coordX = xSel;
+    item.dataset.coordY = ySel;
+
+    gameMatrix[xSel][ySel] = item;
+    gameMatrix[xItem][yItem] = itemSelected;
+
+    itemSelected.classList.remove("selected");
+    itemSelected = null;
+
+    setTimeout(() => verifyItems(), 500);
+  }
+}
+
+function verifyItems() {
+  let removes = getItemsRemove();
+
+  if (removes.length) {
+    for (let i = 0; i < removes.length; i++) {
+      removeSequence(removes[i]);
+    }
+
+    setTimeout(() => {
+      verifyItems();
+    }, 500);
+  } else {
+    for (let i = 0; i < 8; i++) {
+      rearrangeMatrix();
+    }
+
+    setTimeout(() => {
+      generateNews();
+    }, 200);
+  }
+}
+
+function generateNews() {
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (!gameMatrix[i][j]) {
+        let matrixFruit = fruits[Math.floor(Math.random() * 5)];
+        let fruit = document.createElement("div");
+
+        fruit.dataset.type = matrixFruit.fruit;
+        fruit.dataset.coordX = i;
+        fruit.dataset.coordY = j;
+
+        fruit.classList.add("fruit");
+        fruit.classList.add("added");
+        fruit.style.top = `${i * 12.5}%`;
+        fruit.style.left = `${j * 12.5}%`;
+        fruit.style.backgroundImage = `url('${matrixFruit.src}')`;
+
+        gameMatrix[i][j] = fruit;
+
+        addClickListener(fruit);
+
+        gameBoardItems.appendChild(fruit);
+
+        setTimeout(() => fruit.classList.remove("added"), 100);
+      }
+    }
+  }
+
+  if (getItemsRemove().length) {
+    setTimeout(() => verifyItems(), 500);
+  }
+}
+
+function rearrangeMatrix() {
+  for (let col = 0; col < 8; col++) {
+    for (let row = 6; row >= 0; row--) {
+      if (gameMatrix[row][col]) {
+        let currentRow = row;
+        while (
+          currentRow + 1 < 8 &&
+          !gameMatrix[currentRow + 1][col]
         ) {
-          let tempSrc = first.element.getAttribute("src");
-          first.element.setAttribute("src", second.element.getAttribute("src"));
-          second.element.setAttribute("src", tempSrc);
+          // Atualizar visualmente
+          let item = gameMatrix[currentRow][col];
+          item.dataset.coordX = currentRow + 1;
+          item.style.top = `${(currentRow + 1) * 12.5}%`;
 
-          let tempMatrixValues = gameMatrix[first.i][first.j];
-          gameMatrix[first.i][first.j] = gameMatrix[second.i][second.j];
-          gameMatrix[second.i][second.j] = tempMatrixValues;
+          // Atualizar na matriz
+          gameMatrix[currentRow + 1][col] = item;
+          gameMatrix[currentRow][col] = null;
 
-          let firstCheck = checkForMatches(gameMatrix, first.i, first.j);
-          let secondCheck = checkForMatches(gameMatrix, second.i, second.j);
-
-          handleMatches(firstCheck);
-          handleMatches(secondCheck);
-
-          console.log(firstCheck, secondCheck);
-
-          selectedFruits = [];
-          setTimeout(() => {
-            first.element.classList.remove("selected");
-            second.element.classList.remove("selected");
-          }, 500);
-        } else {
-          selectedFruits = [];
-          setTimeout(() => {
-            first.element.classList.remove("selected");
-            second.element.classList.remove("selected");
-          }, 100);
+          currentRow++;
         }
       }
-    });
-  }
-}
-
-// console.log(gameMatrix);
-
-// console.log(selectedFruits);
-
-function checkForMatches(gameMatrix, i, j) {
-  const fruit = gameMatrix[i][j];
-  let horizontalMatches = 1;
-  let verticalMatches = 1;
-  let horizontalMatchesIndexs = [j];
-  let verticalMatchesIndexs = [i];
-
-  // Check horizontal matches to the left
-  let left = j - 1;
-  while (left >= 0 && gameMatrix[i][left] === fruit) {
-    horizontalMatches++;
-    horizontalMatchesIndexs.push(left);
-    left--;
-  }
-
-  // Check horizontal matches to the right
-  let right = j + 1;
-  while (right < gameMatrix[i].length && gameMatrix[i][right] === fruit) {
-    horizontalMatches++;
-    horizontalMatchesIndexs.push(right);
-    right++;
-  }
-
-  // Check vertical matches above
-  let up = i - 1;
-  while (up >= 0 && gameMatrix[up][j] === fruit) {
-    verticalMatches++;
-    verticalMatchesIndexs.push(up);
-    up--;
-  }
-
-  // Check vertical matches below
-  let down = i + 1;
-  while (down < gameMatrix.length && gameMatrix[down][j] === fruit) {
-    verticalMatches++;
-    verticalMatchesIndexs.push(down);
-    down++;
-  }
-
-  return {
-    match: horizontalMatches >= 3 || verticalMatches >= 3,
-    column: {
-      indexs: verticalMatchesIndexs,
-      amount: verticalMatches,
-    },
-    row: {
-      indexs: horizontalMatchesIndexs,
-      amount: horizontalMatches,
-    },
-  };
-}
-
-function handleMatches({ match, column, row }) {
-  if (match) {
-    if (column.amount >= 3 || row.amount >= 3) {
-      column.indexs.forEach((i) => {
-        row.indexs.forEach((j) => {
-          gameMatrixEl[i][j].fruit.classList.add("match");
-          setTimeout(() => {
-            console.log(gameMatrixEl[i][j]);
-
-            gameMatrixEl[i][j].fruitItem.removeChild(gameMatrixEl[i][j].fruit);
-            console.log(column.indexs, row.indexs);
-
-            // newFruit(gameMatrixEl[i][j].fruitItem);
-          }, 1000);
-        });
-      });
     }
   }
 }
 
-function newFruit(fruitItem) {
-  let fruitData = fruits[Math.floor(Math.random() * 5)];
-  let newFruit = document.createElement("img");
-  newFruit.setAttribute("src", fruitData.src);
-  newFruit.classList.add("pointer", "newFruitItem");
-  newFruit.alt = fruitData.fruit;
-  fruitItem.append(newFruit);
-  addFruitActionListener(newFruit);
+function removeSequence(sequence) {
+  sequence.forEach((i, index) => {
+    let x = +i.dataset.coordX;
+    let y = +i.dataset.coordY;
+    let item = gameMatrix[x][y];
+
+    if (item && sequence.length >= 4 && index == 1 && sequence.length != 8) {
+      removeItem(i, true);
+    } else {
+      if (item) {
+        removeItem(i);
+      }
+    }
+  });
 }
 
-function deleteItem(i, j) {
-  let aboveItems = [];
-  gameMatrixEl[i][j].fruitItem.removeChild(gameMatrixEl[i][j].fruit);
-  let up = i - 1;
+function removeItem(item, isBomb = false) {
+  item.addEventListener("transitionend", () => {
+    let x = +item.dataset.coordX;
+    let y = +item.dataset.coordY;
 
-  while (up >= 0) {
-    aboveItems.push({i: up,j});
-    up--;
-  }
-
-  aboveItems.forEach((item) => {
-    let tempMatrixValues = gameMatrix[item.i][item.j];
-    gameMatrix[item.i][item.j] = gameMatrix[item.i+1][item.j+1];
-    gameMatrix[item.i+1][item.j+1] = tempMatrixValues;
+    
+    gameMatrix[x][y] = isBomb ? generateBomb(x, y) : null;
+    item.remove();
   });
 
-  console.log(aboveItems);
-  console.log(gameMatrix);
+  item.classList.add("removed");
+  updateScore()
 }
 
+function generateBomb(x, y) {
+  let bomb = document.createElement("div");
+
+  bomb.classList.add("fruit");
+  bomb.classList.add("added");
+
+  bomb.style.backgroundImage = `url('${bombItem.src}')`;
+  bomb.style.top = `${x * 12.5}%`;
+  bomb.style.left = `${y * 12.5}%`;
+
+  bomb.dataset.coordX = x;
+  bomb.dataset.coordY = y;
+  bomb.dataset.type = bombItem.type;
+
+  gameMatrix[x][y] = bomb;
+
+  addClickListener(bomb);
+  gameBoardItems.appendChild(bomb);
+
+  setTimeout(() => {
+    bomb.classList.remove("added");
+  }, 100);
+
+  return bomb;
+}
+
+function getItemsRemove() {
+  let itemsRemove = [];
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (gameMatrix[i][j]) {
+        let itemCheck = gameMatrix[i][j];
+
+        let itemType = itemCheck.dataset.type;
+
+        let seq = [itemCheck];
+
+        while (
+          gameMatrix[i][j + 1] &&
+          itemType == gameMatrix[i][j + 1].dataset.type
+        ) {
+          seq.push(gameMatrix[i][j + 1]);
+
+          j++;
+        }
+
+        if (seq.length >= 3) itemsRemove.push(seq);
+      }
+    }
+  }
+
+  for (let i = 0; i < 8; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (gameMatrix[j][i]) {
+        let itemCheck = gameMatrix[j][i];
+
+        let itemType = itemCheck.dataset.type;
+
+        let seq = [itemCheck];
+
+        while (
+          gameMatrix[j + 1] &&
+          gameMatrix[j + 1][i] &&
+          itemType == gameMatrix[j + 1][i].dataset.type
+        ) {
+          seq.push(gameMatrix[j + 1][i]);
+
+          j++;
+        }
+
+        if (seq.length >= 3) itemsRemove.push(seq);
+      }
+    }
+  }
+
+  return itemsRemove;
+}
+
+function updateScore() {
+
+  score += 20;
+
+  scoreItem.innerHTML = score;
+}
+
+setTimeout(() => verifyItems(), 500);
