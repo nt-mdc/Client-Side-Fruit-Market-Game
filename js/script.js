@@ -1,16 +1,24 @@
-let start = document.getElementById("inner");
+let start = document.getElementById("start");
 let startForm = document.getElementById("start-form");
 let nicknameInput = document.getElementById("nickname");
 let game = document.getElementById("game");
 let end = document.getElementById("end");
-let scoreItem = document.getElementById('text-score');
+let scoreItem = document.getElementById("text-score");
 let gameBoardItems = document.getElementById("game-board-items");
+let textNickname = document.getElementById("text-nickname");
 let gameTimer = document.getElementById("game-timer-bg");
 
-gameTimer.style.width = "100%"
-
+gameTimer.style.width = "100%";
 let score = 0;
 let nickname = "";
+
+startForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  start.classList.add("hidden");
+  textNickname.innerHTML = nicknameInput.value;
+  console.log(nicknameInput.value);
+  setTimeout(() => verifyItems(), 1000);
+});
 
 const fruits = [
   { fruit: "banana", src: "../imgs/fruit-banana.png" },
@@ -177,10 +185,7 @@ function rearrangeMatrix() {
     for (let row = 6; row >= 0; row--) {
       if (gameMatrix[row][col]) {
         let currentRow = row;
-        while (
-          currentRow + 1 < 8 &&
-          !gameMatrix[currentRow + 1][col]
-        ) {
+        while (currentRow + 1 < 8 && !gameMatrix[currentRow + 1][col]) {
           // Atualizar visualmente
           let item = gameMatrix[currentRow][col];
           item.dataset.coordX = currentRow + 1;
@@ -218,13 +223,12 @@ function removeItem(item, isBomb = false) {
     let x = +item.dataset.coordX;
     let y = +item.dataset.coordY;
 
-    
     gameMatrix[x][y] = isBomb ? generateBomb(x, y) : null;
     item.remove();
   });
 
   item.classList.add("removed");
-  updateScore()
+  updateScore();
 }
 
 function generateBomb(x, y) {
@@ -307,10 +311,37 @@ function getItemsRemove() {
 }
 
 function updateScore() {
-
   score += 20;
 
   scoreItem.innerHTML = score;
 }
+
+document.addEventListener("keyup", (e) => {
+  if (itemSelected) {
+    let xSel = +itemSelected.dataset.coordX;
+    let ySel = +itemSelected.dataset.coordY;
+    let another = null;
+
+    switch (e.keyCode) {
+      case 37:
+        another = gameMatrix[xSel][ySel - 1];
+        break;
+      case 38:
+        another = gameMatrix[xSel - 1][ySel];
+        break;
+      case 39:
+        another = gameMatrix[xSel][ySel + 1];
+        break;
+      case 40:
+        another = gameMatrix[xSel + 1][ySel];
+        break;
+    }
+
+    if (another) {
+      toggleItems(another)
+    }
+
+  }
+});
 
 setTimeout(() => verifyItems(), 500);
